@@ -2,6 +2,7 @@ import argparse
 import requests
 import pandas as pd
 import time
+import logging
 
 
 def read_from_kraken_trade_endpoint(pair:str,since:int,until:int):
@@ -35,9 +36,6 @@ def read_from_kraken_trade_endpoint(pair:str,since:int,until:int):
     yield response.json()
     last_timestamp = int(response.json()["result"]["last"])
     while last_timestamp < until:
-        print(last_timestamp < until)
-        print("Last timestamp: ", last_timestamp)
-        print("until: ", int(response.json()["result"]["last"]))
         query_params = {"pair": pair, "since": last_timestamp}
         response = requests.request("GET", url, headers=headers, data=payload, params=query_params)
         response.raise_for_status() # Raise exception for HTTP errors
@@ -45,6 +43,8 @@ def read_from_kraken_trade_endpoint(pair:str,since:int,until:int):
             break
         yield response.json()
         last_timestamp = int(response.json()["result"]["last"])
+        time.sleep(2) # Kraken API has a rate limit of 1 request per second for public endpoints so we are sleeping for 2 seconds
+
 
 
 def parse_kraken_trade_endpoint_response(response:dict):
@@ -90,6 +90,10 @@ def kraken_trade_data_to_parquet(data:list, since:int, last:int):
 
 if __name__ == '__main__':
 
+    # Configure logging
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('pair', type=str, help='Asset pair to get data for. Example: XBTUSD')
@@ -105,10 +109,16 @@ if __name__ == '__main__':
     else:
         until = int(time.time_ns())
 
+    logging.info(f'Starting data extraction for pair: {pair}, since: {since}, until: {until}')
+
     full_data = []
     for response in read_from_kraken_trade_endpoint(pair,since,until):
         data, last_timestamp = parse_kraken_trade_endpoint_response(response)
-        full_data = [*full_data, *data]    
+        full_data = [*full_data, *data]
+
+    logging.info(f'Finished data extraction. Total records: {len(full_data)}')
 
     kraken_trade_data_to_parquet(full_data, since, last=last_timestamp)
+
+    logging.info('Data successfully written to parquet file')
 

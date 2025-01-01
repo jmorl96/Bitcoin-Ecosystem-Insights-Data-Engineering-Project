@@ -3,6 +3,7 @@ import requests
 import pandas as pd
 import time
 import logging
+import io
 
 
 def read_from_kraken_trade_endpoint(pair:str,since:int,until:int):
@@ -63,7 +64,7 @@ def parse_kraken_trade_endpoint_response(response:dict):
     last = response["result"]["last"]
     return data, last
 
-def kraken_trade_data_to_parquet(data:list, since:int, last:int):
+def kraken_trade_data_to_parquet(data:list, since:int, last:int, pair:str, file_object):
     """
     Converts Kraken trade data to a Parquet file.
 
@@ -83,7 +84,36 @@ def kraken_trade_data_to_parquet(data:list, since:int, last:int):
     ]
 
     dataframe = pd.DataFrame(data=data, columns=columns)
-    dataframe.to_parquet(f"{pair}-{since}-{last}.parquet.gzip",compression="gzip")
+    if file_object:
+        dataframe.to_parquet(file_object,compression="gzip")
+    else:
+        dataframe.to_parquet(f"{pair}-{since}-{last}.parquet.gzip",compression="gzip")
+    
+def upload_to_gcs(file_object,bucket_name,destination_blob_name):
+    """
+    Uploads a file object to Google Cloud Storage.
+    Args:
+        file_object (str): The content of the file to be uploaded.
+        bucket_name (str): The name of the GCS bucket where the file will be uploaded.
+        destination_blob_name (str): The destination path and filename in the GCS bucket.
+    Returns:
+        None
+    Raises:
+        google.cloud.exceptions.GoogleCloudError: If an error occurs during the upload process.
+    Example:
+        upload_to_gcs("file content", "my_bucket", "path/to/destination/file.txt")
+    """
+    
+    from google.cloud import storage
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.upload_from_string(file_object)
+
+    print(
+    f"{destination_blob_name} uploaded to {bucket_name}."
+    )
 
 
 
@@ -99,6 +129,9 @@ if __name__ == '__main__':
     parser.add_argument('pair', type=str, help='Asset pair to get data for. Example: XBTUSD')
     parser.add_argument('since', type=int, help='Return trade data since given timestamp. Example: 1616663618')
     parser.add_argument('-u', '--until', type=int, help='Return trade data until given timestamp. Example: 1616663618')
+    parser.add_argument('-s', '--storage', type=str, choices=['local','gcs'],default='local', help='Destination storage provider. Example: gcs')
+    parser.add_argument('-d', '--destination', type=str, help='Destination bucket name. Example: kraken_data_bucket_de_project')
+
 
     args = parser.parse_args()
 
@@ -108,6 +141,8 @@ if __name__ == '__main__':
         until = args.until
     else:
         until = int(time.time_ns())
+    storage = args.storage
+    destination = args.destination
 
     logging.info(f'Starting data extraction for pair: {pair}, since: {since}, until: {until}')
 
@@ -118,7 +153,18 @@ if __name__ == '__main__':
 
     logging.info(f'Finished data extraction. Total records: {len(full_data)}')
 
-    kraken_trade_data_to_parquet(full_data, since, last=last_timestamp)
+    if storage == 'local':
+        kraken_trade_data_to_parquet(full_data, since, last_timestamp, pair, None)
+        logging.info('Data successfully written to parquet file')
+    
+    elif storage == 'gcs':
+        file_object = io.BytesIO()
+        kraken_trade_data_to_parquet(full_data, since, last_timestamp, pair, file_object)
+        upload_to_gcs(file_object.getvalue(),destination,f"{pair}/{pair}-{since}-{last_timestamp}.parquet.gzip")
+        logging.info(f'Data successfully uploaded to GCS bucket: {destination}')
 
-    logging.info('Data successfully written to parquet file')
+    logging.info('Process completed')
+
+
+    
 

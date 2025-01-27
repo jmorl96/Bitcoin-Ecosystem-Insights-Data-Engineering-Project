@@ -1,0 +1,4 @@
+dbt/kraken_analytics/logs
+dbt/kraken_analytics/target
+dbt/kraken_analytics/dbt_external_tables
+dbt/.user.yml

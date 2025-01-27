@@ -1,0 +1,40 @@
+
+version: 2
+
+models:
+  - name: t_xbtusd_trade_data_s
+    description: "Staging table for XBTUSD data"
+  
+  - name: t_bitcoin_blockchain_blocks_s
+    description: "Staging table for blocks data from BigQuery Public Data for Bitcoin blockchain"
+    columns:
+      - name: hash
+        description: "Hash of this block "
+        tests:
+          - unique
+          - not_null
+      - name: size
+        description: "The size of block data in bytes"
+      - name: stripped_size
+        description: "The size of block data in bytes excluding witness data"
+      - name: weight
+        description: "Three times the base size plus the total size. https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki "
+      - name: number
+        description: "The number of the block"
+      - name: version
+        description: "Protocol version specified in block header"
+      - name: merkle_root
+        description: "The root node of a Merkle tree, where leaves are transaction hashes"
+      - name: timestamp
+        description: "Block creation timestamp specified in block header"
+      - name: timestamp_month
+        description: "Month of the block creation timestamp specified in block header"
+      - name: nonce
+        description: "Difficulty solution specified in block header"
+      - name: bits
+        description: "Difficulty threshold specified in block header"
+      - name: coinbase_param
+        description: "Data specified in the coinbase transaction of this block"
+      - name: transaction_count
+        description: "Number of transactions included in this block"
+

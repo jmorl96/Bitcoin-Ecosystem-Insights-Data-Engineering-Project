@@ -23,7 +23,17 @@ variable "kraken_trade_extract_agent_image" {
     type = string
 }
 
+variable "dbt_image" {
+    description = "The name of the Docker image to build and deploy"
+    type = string
+}
+
 variable "kraken_trade_extract_agent_cloud_run_job_name" {
+    description = "The name of the Cloud Run job to deploy"
+    type = string
+}
+
+variable "dbt_cloud_run_job_name" {
     description = "The name of the Cloud Run job to deploy"
     type = string
 }

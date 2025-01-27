@@ -8,4 +8,9 @@ resource "google_artifact_registry_repository" "docker_repository" {
     command = "gcloud builds submit --config=../cloudbuild.yaml   --substitutions=_REPOSITORY='${var.artifact_registry_name}',_IMAGE_NAME='${var.kraken_trade_extract_agent_image}',_LOCATION='${var.region}' ../."
     when = create
   }
+
+  provisioner "local-exec" {
+    command = "gcloud builds submit --config=../dbt/cloudbuild.yaml   --substitutions=_REPOSITORY='${var.artifact_registry_name}',_IMAGE_NAME='${var.dbt_image}',_LOCATION='${var.region}' ../dbt/."
+    when = create
+  }
 }

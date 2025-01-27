@@ -12,3 +12,18 @@ resource "google_cloud_run_v2_job" "kraken_data_extract" {
     }
   }
 }
+
+resource "google_cloud_run_v2_job" "dbt" {
+  depends_on = [ google_artifact_registry_repository.docker_repository ]
+  name     = var.dbt_cloud_run_job_name
+  location = var.region
+  deletion_protection = false
+
+  template {
+    template {
+      containers {
+        image = "${var.region}-docker.pkg.dev/${var.project}/${var.artifact_registry_name}/${var.dbt_image}:latest"
+      }
+    }
+  }
+}

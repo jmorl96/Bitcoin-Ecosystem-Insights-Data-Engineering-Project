@@ -1,0 +1,11 @@
+
+version: 2
+
+
+
+models:
+  - name: t_agg_daily_xbtusd_trade_data_g
+    description: "Enriched table for XBTUSD data, aggregated by day"
+
+  - name: t_agg_daily_bitcoin_blockchain_blocks_g
+    description: "Enriched table for blocks data from BigQuery Public Data for Bitcoin blockchain, aggregated by day"

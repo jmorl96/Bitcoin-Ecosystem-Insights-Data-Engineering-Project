@@ -28,7 +28,17 @@ variable "kraken_trade_extract_agent_cloud_run_job_name" {
     type = string
 }
 
-variable "bigquery_raw_dataset_name" {
-    description = "The name of the BigQuery dataset to deploy resources to"
+variable "bigquery_bronze_dataset_name" {
+    description = "The name of the BigQuery dataset to deploy raw tables to"
+    type = string
+}
+
+variable "bigquery_silver_dataset_name" {
+    description = "The name of the BigQuery dataset to deploy stagging resources to"
+    type = string
+}
+
+variable "bigquery_location" {
+    description = "The location for the BigQuery datasets"
     type = string
 }

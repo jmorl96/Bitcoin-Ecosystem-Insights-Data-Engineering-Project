@@ -7,7 +7,7 @@ resource "google_artifact_registry_repository" "docker_repository" {
   format        = "DOCKER"
 
   provisioner "local-exec" {
-    command = "gcloud builds submit --config=../cloudbuild.yaml   --substitutions=_REPOSITORY='${var.artifact_registry_name}',_IMAGE_NAME='${var.kraken_trade_extract_agent_image}',_LOCATION='${var.region}' ../."
+    command = "gcloud builds submit --config=../cloudbuild.yaml   --substitutions=_REPOSITORY='${var.artifact_registry_name}',_IMAGE_NAME='${var.kraken_trade_data_extraction_image}',_LOCATION='${var.region}' ../."
     when = create
   } // Build step for the docker image of the extraction process
 

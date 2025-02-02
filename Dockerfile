@@ -11,6 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 USER app_user
 
-COPY kraken_trade_extract_agent.py ./
+COPY kraken_trade_data_extraction_cli.py ./
 
-ENTRYPOINT [ "python", "./kraken_trade_extract_agent.py"]
+ENTRYPOINT [ "python", "./kraken_trade_data_extraction_cli.py"]

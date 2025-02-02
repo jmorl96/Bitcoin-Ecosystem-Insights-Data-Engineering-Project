@@ -2,7 +2,7 @@
 version: 2
 
 models:
-  - name: t_agg_daily_btc_trade_block_data_g
+  - name: t_agg_daily_btc_trade_block_data_p
     description: "Exposition table of the daily aggregated data for Bitcoin trade and blockchain blocks data"
 
 

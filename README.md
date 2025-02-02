@@ -1,4 +1,4 @@
-# Kraken Data Engineering Project
+# Bitcoin Ecosystem Insights Data Engineering Project
 
 ## Introduction
 Brief overview of the project.

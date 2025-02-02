@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: dv_kraken_data_bronze
+  - name: dv_btc_data_bronze
     tables:
       - name: t_xbtusd_trade_data_b
         description: "Raw data from Kraken"

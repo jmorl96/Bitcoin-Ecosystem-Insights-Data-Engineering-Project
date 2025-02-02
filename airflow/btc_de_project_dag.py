@@ -1,10 +1,19 @@
 from datetime import datetime, timedelta
 
 from airflow.models.dag import DAG
+from airflow.models import Variable
 from airflow.providers.google.cloud.operators.cloud_run import CloudRunExecuteJobOperator
 from airflow.operators.latest_only import LatestOnlyOperator
 
 import pendulum
+
+# Read environment variables
+
+project_id = Variable.get("custom_project_id")
+region = Variable.get("custom_region")
+data_bucket = Variable.get("custom_data_bucket")
+extract_job_name = Variable.get("custom_extract_job_name")
+dbt_job_name = Variable.get("custom_dbt_job_name")
 
 # Define the default_args dictionary
 
@@ -44,7 +53,7 @@ with DAG(
         "container_overrides": [
             {
                 "name": "job",
-                "args": ["XBTUSD", "{{ data_interval_start.int_timestamp }}", "-s", "gcs", "-d", "kraken_data_bucket_de_project", "-u", "{{ data_interval_end.int_timestamp }}"],
+                "args": ["XBTUSD", "{{ data_interval_start.int_timestamp }}", "-s", "gcs", "-d", data_bucket, "-u", "{{ data_interval_end.int_timestamp }}"],
                 "clear_args": False,
             }
         ],
@@ -54,10 +63,10 @@ with DAG(
 
     cloud_run_job_extract = CloudRunExecuteJobOperator(
         task_id='cloud_run_job_extract',
-        project_id='engaged-hook-446222-g6',
-        region='us-central1',
+        project_id=project_id,
+        region=region,
         overrides=overrides_extraction,
-        job_name='kraken-trade-extract-agent-job',
+        job_name=extract_job_name,
         dag=dag,
         deferrable=False,
     )
@@ -78,10 +87,10 @@ with DAG(
 
     cloud_run_job_dbt = CloudRunExecuteJobOperator(
         task_id='cloud_run_job_dbt',
-        project_id='engaged-hook-446222-g6',
-        region='us-central1',
+        project_id=project_id,
+        region=region,
         overrides=overrides_dbt,
-        job_name='dbt-job',
+        job_name=dbt_job_name,
         dag=dag,
         deferrable=False,
     )

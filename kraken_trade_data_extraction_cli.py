@@ -53,6 +53,8 @@ def read_from_kraken_trade_endpoint(pair:str,since:int,until:int):
     response = requests.request("GET", url, headers=headers, data=payload, params=query_params)
     response.raise_for_status() # Raise exception for HTTP errors
     yield response.json()
+    if len(str(until)) < 19:
+        until = until * 10**(19-len(str(until))) # Convert until to nanoseconds
     last_timestamp = int(response.json()["result"]["last"])
     while last_timestamp < until:
         query_params = {"pair": pair, "since": last_timestamp}
@@ -79,7 +81,9 @@ def parse_kraken_trade_endpoint_response(response:dict):
     for key in response["result"].keys():
         if key != "last":
             data = response["result"][key]
-    last = response["result"]["last"]
+    last = int(response["result"]["last"])
+    if len(str(last)) > 10:
+        last = last // 10**9 # Convert last to seconds
     return data, last
 
 def kraken_trade_data_to_parquet(data:list, since:int, last:int, pair:str, file_object):

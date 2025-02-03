@@ -18,6 +18,12 @@ resource "google_project_iam_member" "composer_service_account_cloud_run_jobs_ex
   role     = "roles/run.jobsExecutorWithOverrides"
 }
 
+resource "google_project_iam_member" "composer_service_account_cloud_run_viewer_role" {
+  project  = var.project
+  member   = format("serviceAccount:%s", google_service_account.composer_service_account.email)
+  role     = "roles/run.viewer"
+}
+
 // Cloud Run Service Account
 
 resource "google_service_account" "cloud_run_service_account" {
@@ -29,5 +35,17 @@ resource "google_project_iam_member" "cloud_run_service_account_bigquery_user_ro
   project  = var.project
   member   = format("serviceAccount:%s", google_service_account.cloud_run_service_account.email)
   role     = "roles/bigquery.user"
+}
+
+resource "google_project_iam_member" "cloud_run_service_account_bigquery_data_editor_role" {
+  project  = var.project
+  member   = format("serviceAccount:%s", google_service_account.cloud_run_service_account.email)
+  role     = "roles/bigquery.dataEditor"
+}
+
+resource "google_project_iam_member" "cloud_run_service_account_storage_object_user_role" {
+  project  = var.project
+  member   = format("serviceAccount:%s", google_service_account.cloud_run_service_account.email)
+  role     = "roles/storage.objectUser"
 }
 

@@ -9,7 +9,7 @@ with XBTUSD_data_bronze as (
     select
         *, _FILE_NAME
     from
-        {{ source('dv_kraken_data_bronze', 't_xbtusd_trade_data_b') }}
+        {{ source('dv_btc_data_bronze', 't_xbtusd_trade_data_b') }}
     {% if is_incremental() %}
 
     where 

@@ -220,3 +220,4 @@ terraform.rc
 # Ignore dbt files
 dbt/btc_analytics/package-lock.yml
 dbt/btc_analytics/profiles.yml
+dbt/btc_analytics/.user.yml

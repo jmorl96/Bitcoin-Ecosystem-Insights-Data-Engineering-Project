@@ -37,9 +37,9 @@ with DAG(
 
     },
 
-    max_active_runs=5,
+    max_active_runs=3,
 
-    concurrency=5,
+    concurrency=3,
 
     # Define the schedule interval
 

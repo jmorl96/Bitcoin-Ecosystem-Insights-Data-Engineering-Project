@@ -4,6 +4,30 @@ version: 2
 models:
   - name: t_xbtusd_trade_data_s
     description: "Staging table for XBTUSD data"
+    columns:
+      - name: pair
+        description: "Trading pair"
+      - name: price
+        description: "Price of the asset in USD"
+      - name: volume
+        description: "Volume of the asset traded"
+      - name: epoch
+        description: "Timestamp of the trade in epoch format"
+      - name: timestamp_time
+        description: "Timestamp of the trade in human readable format"
+      - name: operation_type
+        description: "Type of operation (buy/sell)"
+      - name: order_type
+        description: "Type of order (market/limit)"
+      - name: miscellanious
+        description: "Miscellanious information"
+      - name: trade_id
+        description: "Trade ID"
+        tests:
+          - unique
+          - not_null
+      - name: gcs_file_name
+        description: "File name of the record in Google Cloud Storage"
   
   - name: t_bitcoin_blockchain_blocks_s
     description: "Staging table for blocks data from BigQuery Public Data for Bitcoin blockchain"

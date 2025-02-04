@@ -13,3 +13,9 @@ resource "google_storage_bucket" "composer_bucket" {
 
     force_destroy = true
 }
+
+resource "google_storage_bucket_object" "airflow_dag" {
+    name   = "dags/btc_de_project_dag.py"
+    source = "../airflow/btc_de_project_dag.py"
+    bucket = google_storage_bucket.composer_bucket.name
+}

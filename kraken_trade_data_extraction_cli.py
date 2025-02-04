@@ -1,3 +1,21 @@
+"""
+kraken_trade_data_extraction_cli.py
+
+This script fetches trade data from the Kraken API for a specified asset pair within a given time range.
+The data is then converted to a Parquet file and uploaded to Google Cloud Storage or saved locally.
+Command Line Interface (CLI) like tool.
+
+Usage:
+    python kraken_trade_data_extraction_cli.py <pair> <since> [-u <until>] [-s <storage>] [-d <destination>]
+
+Arguments:
+    pair (str): The asset pair to fetch data for (e.g., 'XBTUSD').
+    since (int): The starting timestamp for fetching trade data.
+    -u, --until (int): The ending timestamp for fetching trade data.
+    -s, --storage (str): Destination storage provider. Options: 'local' or 'gcs'. Default: 'local'.
+    -d, --destination (str): Destination bucket name in Google Cloud Storage.
+"""
+
 import argparse
 import requests
 import pandas as pd
@@ -35,6 +53,8 @@ def read_from_kraken_trade_endpoint(pair:str,since:int,until:int):
     response = requests.request("GET", url, headers=headers, data=payload, params=query_params)
     response.raise_for_status() # Raise exception for HTTP errors
     yield response.json()
+    if len(str(until)) < 19:
+        until = until * 10**(19-len(str(until))) # Convert until to nanoseconds
     last_timestamp = int(response.json()["result"]["last"])
     while last_timestamp < until:
         query_params = {"pair": pair, "since": last_timestamp}
@@ -61,7 +81,9 @@ def parse_kraken_trade_endpoint_response(response:dict):
     for key in response["result"].keys():
         if key != "last":
             data = response["result"][key]
-    last = response["result"]["last"]
+    last = int(response["result"]["last"])
+    if len(str(last)) > 10:
+        last = last // 10**9 # Convert last to seconds
     return data, last
 
 def kraken_trade_data_to_parquet(data:list, since:int, last:int, pair:str, file_object):
@@ -115,6 +137,11 @@ def upload_to_gcs(file_object,bucket_name,destination_blob_name):
     f"{destination_blob_name} uploaded to {bucket_name}."
     )
 
+def epoch_to_datetime(epoch:int):
+    """
+    Converts an epoch timestamp to a datetime string in the format 'YYYY-MM-DDTHHMMSSZ'.
+    """
+    return time.strftime('%Y-%m-%dT%H%M%SZ', time.gmtime(epoch))
 
 
 
@@ -123,7 +150,7 @@ if __name__ == '__main__':
     # Configure logging
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-
+    # Parse command line arguments
     parser = argparse.ArgumentParser()
 
     parser.add_argument('pair', type=str, help='Asset pair to get data for. Example: XBTUSD')
@@ -143,7 +170,8 @@ if __name__ == '__main__':
         until = int(time.time_ns())
     storage = args.storage
     destination = args.destination
-
+    
+    # Data extraction process
     logging.info(f'Starting data extraction for pair: {pair}, since: {since}, until: {until}')
 
     full_data = []
@@ -153,14 +181,15 @@ if __name__ == '__main__':
 
     logging.info(f'Finished data extraction. Total records: {len(full_data)}')
 
+    # Data storage process
     if storage == 'local':
-        kraken_trade_data_to_parquet(full_data, since, last_timestamp, pair, None)
+        kraken_trade_data_to_parquet(full_data, epoch_to_datetime(since), epoch_to_datetime(last_timestamp), pair, None)
         logging.info('Data successfully written to parquet file')
     
     elif storage == 'gcs':
         file_object = io.BytesIO()
         kraken_trade_data_to_parquet(full_data, since, last_timestamp, pair, file_object)
-        upload_to_gcs(file_object.getvalue(),destination,f"{pair}/{pair}-{since}-{last_timestamp}.parquet.gzip")
+        upload_to_gcs(file_object.getvalue(),destination,f"{pair}/{pair}-{epoch_to_datetime(since)}-{epoch_to_datetime(last_timestamp)}.parquet.gzip")
         logging.info(f'Data successfully uploaded to GCS bucket: {destination}')
 
     logging.info('Process completed')

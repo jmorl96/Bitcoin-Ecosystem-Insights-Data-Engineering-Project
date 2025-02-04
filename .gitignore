@@ -216,3 +216,8 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Ignore dbt files
+dbt/btc_analytics/package-lock.yml
+dbt/btc_analytics/profiles.yml
+dbt/btc_analytics/.user.yml

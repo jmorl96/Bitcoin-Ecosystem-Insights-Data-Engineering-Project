@@ -33,7 +33,7 @@ variable "artifact_registry_name" {
 
 // Image variables for the Cloud Run jobs and Cloud Run jobs names
 
-variable "kraken_trade_extract_agent_image" {
+variable "kraken_trade_data_extraction_image" {
     description = "The name of the Docker image to build and deploy"
     type = string
 }
@@ -43,7 +43,7 @@ variable "dbt_image" {
     type = string
 }
 
-variable "kraken_trade_extract_agent_cloud_run_job_name" {
+variable "kraken_trade_data_extraction_cloud_run_job_name" {
     description = "The name of the Cloud Run job to deploy"
     type = string
 }

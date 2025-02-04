@@ -1,0 +1,85 @@
+
+version: 2
+
+models:
+  - name: t_agg_daily_btc_trade_block_data_p
+    description: "Exposition table of the daily aggregated data for Bitcoin trade and blockchain blocks data"
+    columns:
+      - name: pair
+        description: "Trading pair"
+      - name: date
+        description: "Date of the data"
+      - name: avg_trade_price
+        description: "Average price of the asset in USD"
+      - name: min_trade_price
+        description: "Minimum price of the asset in USD"
+      - name: max_trade_price
+        description: "Maximum price of the asset in USD"
+      - name: trade_volume
+        description: "Total volume of the asset traded"
+      - name: trades_count
+        description: "Number of trades"
+      - name: buy_operations_count
+        description: "Number of buy operations"
+      - name: sell_operations_count
+        description: "Number of sell operations"
+      - name: market_type_orders_count
+        description: "Number of market type orders"
+      - name: limit_type_orders_count
+        description: "Number of limit type orders"
+      - name: min_block_transaction_count
+        description: "Minimum number of transactions included in a block"
+      - name: max_block_transaction_count
+        description: "Maximum number of transactions included in a block"
+      - name: avg_block_transaction_count
+        description: "Average number of transactions included in a block"
+      - name: trades
+        description: "Nested field with all trades for the day"
+        columns:
+          - name: trade_id
+            description: "Trade ID"
+          - name: price
+            description: "Price of the asset in USD"
+          - name: volume
+            description: "Volume of the asset traded"
+          - name: epoch_time
+            description: "Timestamp of the trade in epoch format"
+          - name: timestamp_time
+            description: "Timestamp of the trade in human readable format"
+          - name: operation_type
+            description: "Type of operation (buy/sell)"
+          - name: order_type
+            description: "Type of order (market/limit)"
+          - name: miscellanious
+            description: "Miscellanious information"
+      - name: blocks
+        description: "Nested field with all blocks for the day"
+        columns:
+          - name: hash
+            description: "Hash of this block "
+          - name: size
+            description: "The size of block data in bytes"
+          - name: stripped_size
+            description: "The size of block data in bytes excluding witness data"
+          - name: weight
+            description: "Three times the base size plus the total size. https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki "
+          - name: number
+            description: "The number of the block"
+          - name: version
+            description: "Protocol version specified in block header"
+          - name: merkle_root
+            description: "The root node of a Merkle tree, where leaves are transaction hashes"
+          - name: timestamp
+            description: "Block creation timestamp specified in block header"
+          - name: timestamp_month
+            description: "Month of the block creation timestamp specified in block header"
+          - name: nonce
+            description: "Difficulty solution specified in block header"
+          - name: bits
+            description: "Difficulty threshold specified in block header"
+          - name: coinbase_param
+            description: "Data specified in the coinbase transaction of this block"
+          - name: transaction_count
+            description: "Number of transactions included in this block"
+
+

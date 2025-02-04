@@ -1,4 +1,5 @@
-dbt/kraken_analytics/logs
-dbt/kraken_analytics/target
-dbt/kraken_analytics/dbt_external_tables
+dbt/btc_analytics/logs
+dbt/btc_analytics/target
+dbt/btc_analytics/dbt_external_tables
 dbt/.user.yml
+dbt/package-lock.yml

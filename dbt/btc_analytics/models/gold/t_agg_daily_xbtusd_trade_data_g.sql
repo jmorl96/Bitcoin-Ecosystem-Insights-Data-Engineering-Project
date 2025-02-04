@@ -26,11 +26,11 @@ SELECT
   MIN(price) AS min_trade_price,
   MAX(price) AS max_trade_price,
   sum(volume) AS trade_volume,
-  count(trade_id) AS n_trades,
-  sum( IF(operation_type = "buy",1,0)) AS n_buy_operations,
-  sum( IF(operation_type = "sell",1,0)) AS n_sell_operations,
-  sum( IF(order_type = "market",1,0)) as n_orders_market_type,
-  sum( IF(order_type = "limit",1,0)) as n_orders_limit_type,
+  count(trade_id) AS trades_count,
+  sum( IF(operation_type = "buy",1,0)) AS buy_operations_count,
+  sum( IF(operation_type = "sell",1,0)) AS sell_operations_count,
+  sum( IF(order_type = "market",1,0)) as market_type_orders_count,
+  sum( IF(order_type = "limit",1,0)) as limit_type_orders_count,
   ARRAY_AGG(
     STRUCT(
       trade_id, 

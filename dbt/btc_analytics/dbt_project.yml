@@ -22,7 +22,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 # Configuring models
 models:
   btc_analytics:
-    # Config indicated by + and applies to all files under models/example/
+    # Config indicated by + and applies to all files under models/
     silver:
       +materialized: table
       +dataset: btc_data_silver

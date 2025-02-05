@@ -114,9 +114,10 @@ You can reproduce the project easily by following the steps below:
 5. Configure Google Cloud [Application Default Credentials](https://cloud.google.com/docs/authentication/set-up-adc-local-dev-environment#google-idp).
 6. Clone the project repository from GitHub.
 7. Configure the project settings in the `terraform.tfvars` file. You can find an example file in the `terraform` directory.
-8. Run `terraform init`, `terraform plan`, and `terraform apply` to deploy the infrastructure inside the `terraform` directory. Please note that the deployment process may take some time, specially the Composer environment creation wich can take up to 30 minutes.
-9. **That's it!** The pipeline will now backfill the data and run automatically on a daily basis.
-10. **OPTIONAL**: Make a copy of the Looker Studio dashboard from the link located in the `Visualization` section of the repository and change the data source to your platinum table on BigQuery for exploring the data.
+8. Configure DBT settings in the `profiles.yml` file. You can find an example file in the `dbt/btc_analytics` directory.
+9. Run `terraform init`, `terraform plan`, and `terraform apply` to deploy the infrastructure inside the `terraform` directory. Please note that the deployment process may take some time, specially the Composer environment creation wich can take up to 30 minutes.
+10. **That's it!** The pipeline will now backfill the data and run automatically on a daily basis.
+11. **OPTIONAL**: Make a copy of the Looker Studio dashboard from the link located in the `Visualization` section of the repository and change the data source to your platinum table on BigQuery for exploring the data.
 
 > **_NOTE:_**  For the project to run properly, you need to have a Google Cloud Platform account and enable billing. The project uses Google Cloud services that may incur costs. Make sure to review the pricing of each service before deploying the infrastructure.
 

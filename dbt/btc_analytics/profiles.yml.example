@@ -1,0 +1,12 @@
+btc_analytics:
+  outputs:
+    dev:
+      dataset: dv
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      method: oauth
+      priority: interactive
+      project: project-id
+      threads: 3
+      type: bigquery
+  target: dev

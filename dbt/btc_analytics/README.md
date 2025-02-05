@@ -42,9 +42,6 @@ Designed to be used as containerized dbt project, build and deploy the image usi
 
 **_Note:_**  For the Bitcoin Ecosystem Insights project, we are deploying the dbt project on top a Google Cloud Run Job, using the Google Cloud Build service to build and deploy the image.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
 

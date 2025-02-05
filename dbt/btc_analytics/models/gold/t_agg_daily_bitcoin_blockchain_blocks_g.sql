@@ -1,7 +1,12 @@
 {{
     config(
         materialized='incremental',
-        unique_key='date'
+        unique_key='date',
+        partition_by={
+            "field": "date",
+            "data_type": "date",
+            "granularity": "day"
+        }
     )
 }}
 

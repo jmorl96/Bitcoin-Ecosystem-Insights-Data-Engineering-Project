@@ -1,7 +1,12 @@
 {{
     config(
         materialized='incremental',
-        unique_key='trade_id'
+        unique_key='trade_id',
+        partition_by={
+            "field": "timestamp_time",
+            "data_type": "timestamp",
+            "granularity": "day"
+        }
     )
 }}
 

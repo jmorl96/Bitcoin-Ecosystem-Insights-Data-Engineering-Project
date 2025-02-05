@@ -1,0 +1,16 @@
+project = "project-id" // Change this to your GCP project ID
+region = "us-central1" // The project only supports us-central1
+bigquery_location = "US" // The project only supports US or us-central1
+data_bucket_name = "globally-unique-bucket-name" // Change this to a globally unique bucket name
+composer_bucket_name = "globally-unique-bucket-name" // Change this to a unique bucket name
+// You can also change the following variables if you want
+artifact_registry_name = "btc-insights-artifact-registry-de-project" 
+kraken_trade_data_extraction_image = "kraken-trade-data-extraction"
+dbt_image = "dbt-image"
+kraken_trade_data_extraction_cloud_run_job_name = "kraken-trade-data-extraction-job"
+dbt_cloud_run_job_name = "dbt-job"
+bigquery_bronze_dataset_name = "dv_btc_data_bronze"
+bigquery_silver_dataset_name = "dv_btc_data_silver"
+bigquery_gold_dataset_name = "dv_btc_data_gold"
+bigquery_platinum_dataset_name = "dv_btc_data_platinum"
+

@@ -6,7 +6,7 @@ btc_analytics:
       job_retries: 1
       method: oauth
       priority: interactive
-      project: project-id
+      project: project-id # Replace with your project ID
       threads: 3
       type: bigquery
   target: dev

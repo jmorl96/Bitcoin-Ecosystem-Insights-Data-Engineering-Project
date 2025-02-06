@@ -3,6 +3,7 @@
 resource "google_composer_environment" "composer_enviroment" {
   name = "composer-environment"
   region = var.region
+  depends_on = [ google_artifact_registry_repository.docker_repository , google_cloud_run_v2_job.kraken_data_extract, google_cloud_run_v2_job.dbt ]
 
   config {
 

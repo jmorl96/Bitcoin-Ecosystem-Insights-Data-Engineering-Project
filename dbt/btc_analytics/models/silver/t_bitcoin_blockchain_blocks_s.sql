@@ -1,7 +1,12 @@
 {{
     config(
         materialized='incremental',
-        unique_key='hash'
+        unique_key='hash',
+        partition_by={
+            "field": "timestamp",
+            "data_type": "timestamp",
+            "granularity": "day"
+        }
     )
 }}
 

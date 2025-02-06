@@ -6,26 +6,31 @@ sources:
       - name: t_xbtusd_trade_data_b
         description: "Raw data from Kraken Trades API"
         external:
-          location: 'gs://kraken_data_bucket_de_project/XBTUSD/XBTUSD-*.parquet.gzip'
+          location: "gs://{{ env_var('DBT_DATA_BUCKET_NAME') }}/XBTUSD/XBTUSD-*.parquet.gzip"
           options:
             format: PARQUET
         columns:
           - name: price
             description: "Price of the asset in USD"
+            data_type: string
           - name: volume
             description: "Volume of the asset traded"
-          - name: epoch
-            description: "Timestamp of the trade in epoch format"
-          - name: timestamp_time
-            description: "Timestamp of the trade in human readable format"
-          - name: operation_type
-            description: "Type of operation (buy/sell)"
-          - name: order_type
+            data_type: string
+          - name: time
+            description: "Timestamp of the trade in UNIX format"
+            data_type: float64
+          - name: buy_sell
+            description: "Operation type (buy/sell)"
+            data_type: string
+          - name: market_limit
             description: "Type of order (market/limit)"
+            data_type: string
           - name: miscellanious
             description: "Miscellanious information"
+            data_type: string
           - name: trade_id
             description: "Trade ID"
+            data_type: int64
   - name: bigquery-public-data
     database: bigquery-public-data
     schema: crypto_bitcoin

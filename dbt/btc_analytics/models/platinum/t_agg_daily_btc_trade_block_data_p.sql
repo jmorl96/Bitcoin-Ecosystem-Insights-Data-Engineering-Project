@@ -1,7 +1,12 @@
 {{
     config(
         materialized='incremental',
-        unique_key='date'
+        unique_key='date',
+        partition_by={
+            "field": "date",
+            "data_type": "date",
+            "granularity": "day"
+        }
     )
 }}
 
@@ -39,11 +44,11 @@ SELECT
   min_trade_price,
   max_trade_price,
   trade_volume,
-  n_trades,
-  n_buy_operations,
-  n_sell_operations,
-  n_orders_market_type,
-  n_orders_limit_type,
+  trades_count,
+  buy_operations_count,
+  sell_operations_count,
+  market_type_orders_count,
+  limit_type_orders_count,
   min_block_size,
   max_block_size,
   avg_block_size,
@@ -66,5 +71,3 @@ ON trade.date = blockchain.date
 SELECT 
     *
 FROM final_data
-
-ORDER BY date ASC

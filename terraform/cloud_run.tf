@@ -26,6 +26,10 @@ resource "google_cloud_run_v2_job" "dbt" {
     template {
       containers {
         image = "${var.region}-docker.pkg.dev/${var.project}/${var.artifact_registry_name}/${var.dbt_image}:latest"
+        env {
+          name = "DBT_DATA_BUCKET_NAME"
+          value = var.data_bucket_name
+        }
       }
       service_account = google_service_account.cloud_run_service_account.email
     }

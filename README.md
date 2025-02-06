@@ -63,7 +63,7 @@ The data warehouse is divided into four layers:
 1. **Bronze**: The external table that reads the raw data from the Kraken API stored in Google Cloud Storage.
 2. **Silver**: The staging tables that store cleaned and deduplicated data from the Bitcoin blockchain and Kraken API.
 3. **Gold**: Daily aggregated tables that provide a high-level view of the data for both sources. Nested data fields are included to provide a more detailed view of the data without aggregations.
-4. **Platinum**: The final layer that combines data from both sources to provide a comprehensive view of the Bitcoin ecosystem. This table is used for visualization and analysis in Looker Studio.
+4. **Platinum**: The final layer that combines the data from both sources to provide a comprehensive view of the Bitcoin ecosystem. This table is used for visualization and analysis in Looker Studio.
 
 
 ![DBT Lineage](./media/dbt_lineage.png)
@@ -103,28 +103,32 @@ You can explore the Looker Studio dashboard by making a copy of the dashboard fr
 
 ## Reproducibility
 
+> **_NOTE:_**  For the project to run properly, you need to have a Google Cloud Platform account and enable billing. The project uses Google Cloud services that may incur costs. Make sure to review the pricing of each service before deploying the infrastructure.
+
 The project is designed to be reproducible and scalable. The infrastructure is defined as code using Terraform, allowing for easy deployment and management of resources on Google Cloud Platform. The data collection, processing, and warehousing tasks are automated using Airflow and DBT, ensuring the pipeline runs smoothly and consistently. 
 
 You can reproduce the project easily by following the steps below:
 
 1. Create a Google Cloud Platform account.
 2. Create a Google Cloud Project.
-3. Enable the necessary APIs on Google Cloud Project and billing.
-4. Install Terraform, Docker, and the [Google Cloud SDK](https://cloud.google.com/sdk/docs/install-sdk) on your local machine.
+3. Enable the necessary APIs (Artifact Registry API, Cloud Composer API, Cloud Run Admin API) on Google Cloud Project and billing.
+4. Install Terraform, and the [Google Cloud SDK](https://cloud.google.com/sdk/docs/install-sdk) on your local machine.
 5. Configure Google Cloud [Application Default Credentials](https://cloud.google.com/docs/authentication/set-up-adc-local-dev-environment#google-idp).
 6. Clone the project repository from GitHub.
 7. Configure the project settings in the `terraform.tfvars` file. You can find an example file in the `terraform` directory.
-8. Run `terraform init`, `terraform plan`, and `terraform apply` to deploy the infrastructure inside the `terraform` directory. Please note that the deployment process may take some time, specially the Composer environment creation wich can take up to 30 minutes.
-9. **That's it!** The pipeline will now backfill the data and run automatically on a daily basis.
-10. **OPTIONAL**: Make a copy of the Looker Studio dashboard from the link located in the `Visualization` section of the repository and change the data source to your platinum table on BigQuery for exploring the data.
-
-> **_NOTE:_**  For the project to run properly, you need to have a Google Cloud Platform account and enable billing. The project uses Google Cloud services that may incur costs. Make sure to review the pricing of each service before deploying the infrastructure.
+8. Configure DBT settings in the `profiles.yml` file. You can find an example file in the `dbt/btc_analytics` directory.
+9. From the root directory of the project:
+   - Run `cd terraform` to navigate to the `terraform` directory.
+   - Run `terraform init`, `terraform plan`, review the plan and run `terraform apply` to deploy the infrastructure.
+> **_NOTE:_** Please note that the deployment process may take some time, specially the Composer environment creation wich can take up to 30 minutes.
+10. **That's it!** The pipeline will now backfill the data and run automatically on a daily basis.
+11. **OPTIONAL**: Make a copy of the Looker Studio dashboard from the link located in the `Visualization` section of the repository and change the data source to your platinum table on BigQuery for exploring the data.
 
 ## Future Improvements
 
 The project can be improved in several ways:
 
 - Data extraction from the Bitcoin blockchain can be performed with a new ingestion process exporting data to files on Google Cloud Storage so you don't need to deploy the project on US region.
-- Add more tests to the project to DBT and the rest of the pipeline in general.
+- Add more tests to the project for DBT and the rest of the pipeline in general.
 - Add more data sources to the project. For example, social media data for sentiment analysis.
 - Compatibility with other cryptocurrencies and exchanges.

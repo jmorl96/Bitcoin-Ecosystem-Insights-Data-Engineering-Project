@@ -11,7 +11,7 @@ models:
         description: "Price of the asset in USD"
       - name: volume
         description: "Volume of the asset traded"
-      - name: epoch
+      - name: epoch_time
         description: "Timestamp of the trade in epoch format"
       - name: timestamp_time
         description: "Timestamp of the trade in human readable format"

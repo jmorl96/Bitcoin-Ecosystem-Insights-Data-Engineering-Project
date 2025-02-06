@@ -31,23 +31,22 @@ models:
         description: "Number of limit type orders"
       - name: trades
         description: "Nested field with all trades for the day"
-        columns:
-          - name: trade_id
-            description: "Trade ID"
-          - name: price
-            description: "Price of the asset in USD"
-          - name: volume
-            description: "Volume of the asset traded"
-          - name: epoch_time
-            description: "Timestamp of the trade in epoch format"
-          - name: timestamp_time
-            description: "Timestamp of the trade in human readable format"
-          - name: operation_type
-            description: "Type of operation (buy/sell)"
-          - name: order_type
-            description: "Type of order (market/limit)"
-          - name: miscellanious
-            description: "Miscellanious information"
+      - name: trades.trade_id
+        description: "Trade ID"
+      - name: trades.price
+        description: "Price of the asset in USD"
+      - name: trades.volume
+        description: "Volume of the asset traded"
+      - name: trades.epoch_time
+        description: "Timestamp of the trade in epoch format"
+      - name: trades.timestamp_time
+        description: "Timestamp of the trade in human readable format"
+      - name: trades.operation_type
+        description: "Type of operation (buy/sell)"
+      - name: trades.order_type
+        description: "Type of order (market/limit)"
+      - name: trades.miscellanious
+        description: "Miscellanious information"
 
   - name: t_agg_daily_bitcoin_blockchain_blocks_g
     description: "Enriched table for blocks data from BigQuery Public Data for Bitcoin blockchain, aggregated by day"
@@ -70,31 +69,30 @@ models:
         description: "Average number of transactions included in a block"
       - name: blocks
         description: "Nested field with all blocks for the day"
-        columns:
-          - name: hash
-            description: "Hash of this block "
-          - name: size
-            description: "The size of block data in bytes"
-          - name: stripped_size
-            description: "The size of block data in bytes excluding witness data"
-          - name: weight
-            description: "Three times the base size plus the total size. https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki "
-          - name: number
-            description: "The number of the block"
-          - name: version
-            description: "Protocol version specified in block header"
-          - name: merkle_root
-            description: "The root node of a Merkle tree, where leaves are transaction hashes"
-          - name: timestamp
-            description: "Block creation timestamp specified in block header"
-          - name: timestamp_month
-            description: "Month of the block creation timestamp specified in block header"
-          - name: nonce
-            description: "Difficulty solution specified in block header"
-          - name: bits
-            description: "Difficulty threshold specified in block header"
-          - name: coinbase_param
-            description: "Data specified in the coinbase transaction of this block"
-          - name: transaction_count
-            description: "Number of transactions included in this block"
+      - name: blocks.hash
+        description: "Hash of this block "
+      - name: blocks.size
+        description: "The size of block data in bytes"
+      - name: blocks.stripped_size
+        description: "The size of block data in bytes excluding witness data"
+      - name: blocks.weight
+        description: "Three times the base size plus the total size. https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki "
+      - name: blocks.number
+        description: "The number of the block"
+      - name: blocks.version
+        description: "Protocol version specified in block header"
+      - name: blocks.merkle_root
+        description: "The root node of a Merkle tree, where leaves are transaction hashes"
+      - name: blocks.timestamp
+        description: "Block creation timestamp specified in block header"
+      - name: blocks.timestamp_month
+        description: "Month of the block creation timestamp specified in block header"
+      - name: blocks.nonce
+        description: "Difficulty solution specified in block header"
+      - name: blocks.bits
+        description: "Difficulty threshold specified in block header"
+      - name: blocks.coinbase_param
+        description: "Data specified in the coinbase transaction of this block"
+      - name: blocks.transaction_count
+        description: "Number of transactions included in this block"
 
